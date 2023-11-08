@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>021900619孙伟亮</title>
+    <script type="text/javascript" src="https://unpkg.com/vue@next"></script>
+    <!-- Import style -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css"/>
+    <!-- Import Vue 3 -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="https://unpkg.com/element-plus"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/FileSaver.js/2.0.5/FileSaver.js"></script>
+
+
+</head>
+<body>
+<div id="app">
+    <div id="DetectResultFeature">
+        <el-tabs v-model="activeName" class="demo-tabs">
+            <el-tab-pane label="基础计算器" name="first">
+                <div style="with:100%;height: 70vh;display: flex">
+                    <div class="DetectResult">
+                        <div style="width: 100%;height: 5vh">
+                            <el-input v-model="input" disabled :rows="1"/>
+                        </div>
+                        <div style="width: 100%;height: 5vh">
+                            <el-input v-model="output" disabled :rows="1"/>
+                        </div>
+                        <div class="Botton">
+                            <div class="BottonRow">
+                                <!--                            <div class="BottonItem"></div>-->
+
+                                <div class="BottonItem"></div>
+                                <div class="BottonItem">
+                                    <!--                                <el-button round size="large">Inv</el-button>-->
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('(')">(</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char(')')">)</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('%')">%</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="clear">{{input ? "CE" : "AC"}}</el-button>
+                                </div>
+                            </div>
+                            <div class="BottonRow">
+                                <!--                            <div class="BottonItem">-->
+                                <!--                                <el-button round size="large" @click="input_char('!')">x!</el-button>-->
+                                <!--                            </div>-->
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('sin(')">sin</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('cos(')">cos</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('7')">7</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('8')">8</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('9')">9</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('/')">/</el-button>
+                                </div>
+                            </div>
+                            <div class="BottonRow">
+                                <!--                            <div class="BottonItem">-->
+                                <!--                                <el-button round size="large" @click="input_char('pi')">pi</el-button>-->
+                                <!--                            </div>-->
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('tan(')">tan</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('log(')">log</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('4')">4</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('5')">5</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('6')">6</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('*')">*</el-button>
+                                </div>
+                            </div>
+                            <div class="BottonRow">
+                                <!--                            <div class="BottonItem">-->
+                                <!--                                <el-button round size="large" @click="input_char('e')">e</el-button>-->
+                                <!--                            </div>-->
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('ln')">ln</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('sqrt(')">sqrt</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('1')">1</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('2')">2</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('3')">3</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('-')">-</el-button>
+                                </div>
+                            </div>
+                            <div class="BottonRow">
+                                <!--                            <div class="BottonItem">-->
+                                <!--                                <el-button round size="large" @click="input_char('e')">EXP</el-button>-->
+                                <!--                            </div>-->
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="ans">Ans</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('^')">^</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('0')">0</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('.')">.</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="equal()">=</el-button>
+                                </div>
+                                <div class="BottonItem">
+                                    <el-button round size="large" @click="input_char('+')">+</el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="DetectResult">
+                        <el-table
+                                size="medium"
+                                style="width: 100%"
+                                empty-text="暂无数据"
+                                :data="history"
+                                scrollbar-always-on
+                                height="55vh"
+                        >
+
+                            <el-table-column label="序号" fixed type="index" width="60"></el-table-column>
+                            <!--                    <el-table-column fixed type="index"/>-->
+                            <el-table-column label="表达式" prop="expression"></el-table-column>
+                            <el-table-column label="值" prop="result" sortable></el-table-column>
+                        </el-table>
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="利率计算器" name="second">
+                <div style="with:100%;height: 70vh;display: flex">
+                    <div class="DetectResult">
+                        <el-form :model="ck" label-width="120px">
+                            <el-form-item label="存款类型" @change="c_type_change">
+                                <el-radio v-model="ck.c_type" label="活期">活期</el-radio>
+                                <el-radio v-model="ck.c_type" label="定期">定期</el-radio>
+                            </el-form-item>
+                            <el-form-item
+                                    v-if="ck.c_type==='活期'"
+                                    label="存款年份"
+                                    prop="year"
+                                    :rules="[
+        { required: true, message: '存款年份不可为空' },
+        { type: 'number', message: '存款年份要是数字' },
+      ]"
+                            >
+                                <el-input
+                                        v-model.number="ck.year"
+                                        type="text"
+                                        autocomplete="off"
+                                />
+                            </el-form-item>
+                            <el-form-item label="存款时间" v-if="ck.c_type==='定期'">
+                                <el-select
+                                        v-model="ck.year"
+                                        placeholder="选择存款时长"
+                                        clearable
+                                >
+                                    <el-option label="三个月" value="three_month">三个月</el-option>
+                                    <el-option label="半年" value="half_year">半年</el-option>
+                                    <el-option label="一年" value="one_year">一年</el-option>
+                                    <el-option label="两年" value="two_year">两年</el-option>
+                                    <el-option label="三年" value="three_year">三年</el-option>
+                                    <el-option label="五年" value="five_year">五年</el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="存款利率" v-if="ck.c_type==='活期'||(ck.c_type==='定期' && ck.year)">
+                                <el-input v-if="ck.c_type==='活期'" v-model="ck.rate.huoqi_rate"></el-input>
+                                <el-input v-if="ck.c_type==='定期' && ck.year"
+                                          v-model="ck.rate[ck.year]"></el-input>
+                            </el-form-item>
+                            <el-form-item
+                                    label="存款金额"
+                                    prop="money"
+                                    :rules="[
+        { required: true, message: '存款金额不可为空' },
+        { type: 'number', message: '存款金额要是数字' },
+      ]"
+                            >
+                                <el-input
+                                        v-model.number="ck.money"
+                                        type="text"
+                                        autocomplete="off"
+                                />
+                            </el-form-item>
+
+                            <el-form-item v-if="ck.c_type && ck.year">
+                                <el-button type="primary" @click="onSubmit_cunkuan">计算利润</el-button>
+                            </el-form-item>
+                            <el-form-item label="存款利润" v-if="ck_result">
+                                {{ck_result}}
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                    <div class="DetectResult">
+                        <el-form :model="dk" label-width="120px">
+
+                            <el-form-item label="贷款时间">
+                                <el-select
+                                        v-model="dk.year"
+                                        placeholder="选择存款时长"
+                                        clearable
+                                >
+                                    <el-option label="半年" value="half_year">半年</el-option>
+                                    <el-option label="一年" value="one_year">一年</el-option>
+                                    <el-option label="两年" value="two_year">两年</el-option>
+                                    <el-option label="三年" value="three_year">三年</el-option>
+                                    <el-option label="三年" value="four_year">四年</el-option>
+                                    <el-option label="五年" value="five_year">五年</el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="贷款利率" v-if="dk.year">
+                                <el-input v-if="dk.year && dk.year==='half_year'"
+                                          v-model="dk.rate.half_year"></el-input>
+                                <el-input v-if="dk.year && dk.year==='one_year'" v-model="dk.rate.one_year"></el-input>
+                                <el-input v-if="dk.year && dk.year==='two_year'"
+                                          v-model="dk.rate.one_three_year"></el-input>
+                                <el-input v-if="dk.year && dk.year==='three_year'"
+                                          v-model="dk.rate.three_five_year"></el-input>
+                                <el-input v-if="dk.year && dk.year==='four_year'"
+                                          v-model="dk.rate.three_five_year"></el-input>
+                                <el-input v-if="dk.year && dk.year==='five_year'"
+                                          v-model="dk.rate.five_year"></el-input>
+                            </el-form-item>
+                            <el-form-item
+                                    label="贷款金额"
+                                    prop="money"
+                                    :rules="[
+        { required: true, message: '存款金额不可为空' },
+        { type: 'number', message: '存款金额要是数字' },
+      ]"
+                            >
+                                <el-input
+                                        v-model.number="dk.money"
+                                        type="text"
+                                        autocomplete="off"
+                                />
+                            </el-form-item>
+
+                            <el-form-item v-if="dk.year && dk.money">
+                                <el-button type="primary" @click="onSubmit_daikuan">计算利息</el-button>
+                            </el-form-item>
+                            <el-form-item label="贷款利息" v-if="dk_result">
+                                {{dk_result}}
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+
+    </div>
+</div>
+<script>
+
+    const App = {
+            data() {
+                const activeName = "first";
+                const input = ""
+                const output = ""
+                const need_clear_input = false
+                const history = []
+                const ck = {
+                    c_type: '',
+                    year: null,
+                    rate: {},
+                    money: null
+                }
+                const dk = {
+                    year: null,
+                    rate: {},
+                    money: null
+                }
+                const ck_result = null
+                const dk_result = null
+                return {
+                    activeName, input, output, need_clear_input, history, ck, ck_result, dk, dk_result
+                };
+            },
+            mounted() {
+                this.get_rate()
+            },
+            methods: {
+                clear() {
+                    // this.input = "";
+                    if (this.input) {
+                        if (this.input.slice(-3, this.input.length) === "Ans") {
+                            this.input = this.input.slice(0, -3)
+                        } else {
+                            this.input = this.input.slice(0, -1)
+                        }
+                    } else {
+                        this.input = "";
+                        this.output = ""
+                    }
+
+                    // this.output = ""
+                },
+                input_char(char) {
+                    if (this.need_clear_input) {
+                        this.input = ""
+                        this.need_clear_input = false
+                    }
+                    this.input += char;
+                },
+                equal() {
+                    if (!this.input) {
+                        alert("表达式不能为空！")
+                        return
+                    }
+                    let data = JSON.stringify({
+                        "expression": this.input
+                    });
+
+                    let config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: '/api/calculate/',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        },
+                        data: data
+                    };
+
+                    axios.request(config)
+                        .then((response) => {
+                            if (response.data.code === 200) {
+                                this.output = response.data.data.result;
+                                this.need_clear_input = true;
+                            } else {
+                                alert(response.data.error)
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                },
+                get_history() {
+                    let config = {
+                        method: 'get',
+                        maxBodyLength: Infinity,
+                        url: '/api/get_history_list/',
+                        headers: {
+                            'Access-Control-Allow-Origin': '*'
+                        }
+                    };
+
+                    axios.request(config)
+                        .then((response) => {
+                            this.history = response.data;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                },
+                ans() {
+                    this.input_char("Ans");
+                    this.get_history()
+                },
+                c_type_change() {
+                    this.ck.year = null
+                },
+                onSubmit_cunkuan() {
+                    console.log(this.ck)
+                    let data = JSON.stringify({
+                        "ck": this.ck
+                    });
+
+                    let config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: '/api/calculate_ck/',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        },
+                        data: data
+                    };
+
+                    axios.request(config)
+                        .then((response) => {
+                            this.ck_result = response.data.result;
+                            this.get_rate()
+
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                },
+                onSubmit_daikuan() {
+                    let data = JSON.stringify({
+                        "dk": this.dk
+                    });
+
+                    let config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: '/api/calculate_dk/',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        },
+                        data: data
+                    };
+
+                    axios.request(config)
+                        .then((response) => {
+                            this.dk_result = response.data.result;
+                            this.get_rate()
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                },
+                get_rate() {
+                    let config = {
+                        method: 'get',
+                        maxBodyLength: Infinity,
+                        url: '/api/get_rate/',
+                        headers: {
+                            'Access-Control-Allow-Origin': '*'
+                        }
+                    };
+
+                    axios.request(config)
+                        .then((response) => {
+                            this.ck.rate = response.data.ck
+                            this.dk.rate = response.data.dk
+                            console.log(this.dk)
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+
+                }
+            }
+        }
+    ;
+    const app = Vue.createApp(App);
+
+    app.use(ElementPlus);
+    app.mount("#app");
+</script>
+</body>
+</html>
+
+<style>
+    #DetectResultFeature {
+        list-style: none;
+        width: 100%;
+        overflow: auto;
+        text-align: center;
+        /*height: 70vh;*/
+    }
+
+    .Botton {
+        width: 100%;
+        height: 60vh;
+        /*background-color: blue;*/
+    }
+
+    .BottonRow {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 4vh;
+        padding: 1vh 0vh 5vh 0vh;
+        /*background-color: yellow;*/
+        justify-content: space-between;
+
+    }
+
+    .BottonItem {
+        display: flex;
+        text-align: center;
+        width: 8vh;
+        border-radius: 20%;
+        /*background-color: black;*/
+        justify-content: center;
+        align-items: center;
+        line-height: 100%;
+        font-size: 6vh;
+    }
+
+    .DetectResult {
+        width: 38%;
+        height: 56vh;
+        background: #EAECF3;
+        padding: 16px 16px 11px 16px;
+        border-radius: 16px;
+        margin: 5vh;
+    }
+
+    .demo-tabs > .el-tabs__content {
+        padding: 32px;
+        color: #6b778c;
+        font-size: 32px;
+        font-weight: 600;
+    }
+</style>
